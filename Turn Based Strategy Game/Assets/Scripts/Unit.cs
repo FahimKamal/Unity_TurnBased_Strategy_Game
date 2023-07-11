@@ -1,13 +1,22 @@
 using System;
+using Grid;
 using UnityEngine;
 
 public class Unit : MonoBehaviour{
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
     [SerializeField] private Animator animator;
     private Vector3 _targetPosition;
-    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+
+    private GridPosition _currentGridPosition;
 
     private void Awake(){
         _targetPosition = transform.position;
+    }
+
+    private void Start(){
+        
+        _currentGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+        LevelGrid.Instance.SetUnitAtGridPosition(_currentGridPosition, this);
     }
 
     private void Update(){
@@ -25,6 +34,12 @@ public class Unit : MonoBehaviour{
         }
         else{
             animator.SetBool(IsWalking, false);
+        }
+        
+        var newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
+        if (newGridPosition != _currentGridPosition){
+            LevelGrid.Instance.UnitMovedGridPosition(this, _currentGridPosition, newGridPosition);
+            _currentGridPosition = newGridPosition;
         }
     }
 
