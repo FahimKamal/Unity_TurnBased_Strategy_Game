@@ -14,15 +14,13 @@ namespace Grid{
         
             _gridObjectArray = new GridObject[width, height];
 
-            for (int x = 0; x < width; x++){
-                for (int z = 0; z < height; z++){
+            for (var x = 0; x < width; x++){
+                for (var z = 0; z < height; z++){
                     // Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x, z) + Vector3.right * .2f, Color.white, 1000f);
                     var gridPosition = new GridPosition(x, z);
                     _gridObjectArray[x, z] = new GridObject(this, gridPosition);
                 }
             }
-        
-        
         }
 
         public Vector3 GetWorldPosition(GridPosition gridPosition){
@@ -37,8 +35,8 @@ namespace Grid{
         }
 
         public void CreateDebugObjects(Transform debugPrefab, Transform parent){
-            for (int x = 0; x < _width; x++){
-                for (int z = 0; z < _height; z++){
+            for (var x = 0; x < _width; x++){
+                for (var z = 0; z < _height; z++){
                     var gridPosition = new GridPosition(x, z);
                     var debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity,  parent);
                     var gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
