@@ -7,7 +7,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour{
 
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
-    private const float Max_FOLLOW_Y_OFFSET = 12f;
+    private const float MAX_FOLLOW_Y_OFFSET = 12f;
     
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
@@ -61,10 +61,10 @@ public class CameraController : MonoBehaviour{
         if (Input.mouseScrollDelta.y > 0){
             _targetFollowOffset.z -= zoomAmount;
         }
-        if (Input.mouseScrollDelta.y > 0){
+        if (Input.mouseScrollDelta.y < 0){
             _targetFollowOffset.z += zoomAmount;
         }
-        _targetFollowOffset.y = Mathf.Clamp(_targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, Max_FOLLOW_Y_OFFSET);
+        _targetFollowOffset.y = Mathf.Clamp(_targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);
 
         var zoomSpeed = 5f;
         cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset, _targetFollowOffset,
