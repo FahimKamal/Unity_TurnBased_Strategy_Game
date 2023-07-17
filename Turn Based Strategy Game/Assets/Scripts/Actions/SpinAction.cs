@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Actions{
     public class SpinAction : BaseAction{
+        
         private float _totalSpinAmount;
 
         private void Update(){
@@ -13,10 +15,12 @@ namespace Actions{
             _totalSpinAmount += spinAddAmount;
             if (_totalSpinAmount >= 360f){
                 IsActive = false;
+                OnActionComplete();
             }
         }
 
-        public void Spin(){
+        public void Spin(Action onSpinComplete){
+            OnActionComplete = onSpinComplete;
             IsActive = true;
             _totalSpinAmount = 0f;
         }

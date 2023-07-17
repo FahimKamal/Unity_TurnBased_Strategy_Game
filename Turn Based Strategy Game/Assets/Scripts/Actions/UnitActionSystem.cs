@@ -19,7 +19,11 @@ namespace Actions{
         [SerializeField] private Unit selectedUnit;
         [SerializeField] private LayerMask unitLayerMask;
 
+        private bool _isBusy;
+
         private void Update(){
+
+            if (_isBusy) return;
         
             if (Input.GetMouseButtonDown(0)){
                 // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
@@ -28,14 +32,24 @@ namespace Actions{
                 // if no new unit is selected then move the already selected unit to that position.
                 GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
                 if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)){
-                    selectedUnit.GetMoveAction().Move(mouseGridPosition);
+                    SetBusy();
+                    selectedUnit.GetMoveAction().Move(mouseGridPosition, ClearBusy);
                 }
                 // selectedUnit.GetMoveAction().Move(MouseWorld.GetPosition());
             }
 
             if (Input.GetMouseButtonDown(1)){
-                selectedUnit.GetSpinAction().Spin();
+                SetBusy();
+                selectedUnit.GetSpinAction().Spin(ClearBusy);
             }
+        }
+
+        private void SetBusy(){
+            _isBusy = true;
+        }
+
+        private void ClearBusy(){
+            _isBusy = false;
         }
 
         /// <summary>

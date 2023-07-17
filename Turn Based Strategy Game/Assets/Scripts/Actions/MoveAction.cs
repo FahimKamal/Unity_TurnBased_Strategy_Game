@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
@@ -34,6 +35,7 @@ namespace Actions{
             else{
                 animator.SetBool(IsWalking, false);
                 IsActive = false;
+                OnActionComplete();
             }
         }
 
@@ -50,7 +52,9 @@ namespace Actions{
         /// Move the a given valid gridPosition.
         /// </summary>
         /// <param name="gridPosition"></param>
-        public void Move(GridPosition gridPosition){
+        /// <param name="onActionComplete"></param>
+        public void Move(GridPosition gridPosition, Action onActionComplete){
+            OnActionComplete = onActionComplete;
             _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
             IsActive = true;
         }
@@ -97,7 +101,7 @@ namespace Actions{
                 
                     // Grid position is valid put it in list.
                     validGridPositionList.Add(testGridPosition);
-                    Debug.Log(testGridPosition);
+                    // Debug.Log(testGridPosition);
                 }
             
             }
