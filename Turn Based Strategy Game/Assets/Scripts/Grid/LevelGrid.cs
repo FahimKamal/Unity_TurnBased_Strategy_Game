@@ -42,6 +42,9 @@ public class LevelGrid : MonoBehaviour{
         AddUnitAtGridPosition(toGridPosition, unit);
     }
     
+    public int GetWidth => _gridSystem.GetWidth;
+    public int GetHeight => _gridSystem.GetHeight;
+    
     /// <summary>
     /// Get the gridPosition of the given worldPosition.
     /// </summary>
