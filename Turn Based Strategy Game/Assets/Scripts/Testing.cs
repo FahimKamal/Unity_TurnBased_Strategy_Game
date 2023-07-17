@@ -3,19 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Testing : MonoBehaviour{
 
-    [SerializeField] private Transform gridDebugObjectPrefab;
-    
-    private GridSystem _gridSystem;
+    [SerializeField] private Unit unit;
     private void Start(){
-        _gridSystem = new GridSystem(10, 10, 2f);
-        _gridSystem.CreateDebugObjects(gridDebugObjectPrefab, transform);
+        
     }
 
     private void Update(){
-        Debug.Log(_gridSystem.GetGridPosition(MouseWorld.GetPosition()));
-        
+        if (Input.GetKeyDown(KeyCode.T)){
+            unit.GetMoveAction().GetValidActionGridPositionList();
+        }
+
     }
 }

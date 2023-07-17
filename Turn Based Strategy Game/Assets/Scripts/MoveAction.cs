@@ -36,10 +36,36 @@ public class MoveAction : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Move to a given world location.
+    /// </summary>
+    /// <param name="targetPos"></param>
     public void Move(Vector3 targetPos){
         _targetPosition = targetPos;
     }
 
+    /// <summary>
+    /// Move the a given valid gridPosition.
+    /// </summary>
+    /// <param name="gridPosition"></param>
+    public void Move(GridPosition gridPosition){
+        _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+    }
+
+    /// <summary>
+    /// Check if given gridPosition is a valid moveAction gridPosition or not.
+    /// </summary>
+    /// <param name="gridPosition"></param>
+    /// <returns></returns>
+    public bool IsValidActionGridPosition(GridPosition gridPosition){
+        List<GridPosition> validGridPositionList = GetValidActionGridPositionList();
+        return validGridPositionList.Contains(gridPosition);
+    }
+
+    /// <summary>
+    /// Get the list of valid gridPosition where unit can move to.
+    /// </summary>
+    /// <returns>List of valid GridPosition</returns>
     public List<GridPosition> GetValidActionGridPositionList(){
         var validGridPositionList = new List<GridPosition>();
 
@@ -49,6 +75,26 @@ public class MoveAction : MonoBehaviour
             for (int z = -maxMoveDistance; z <= maxMoveDistance; z++){
                 var offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+                
+                // Checks if the gridPosition is valid. If not valid then skip it.
+                if(!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                // Skip present gridPosition of the unit.
+                if (unitGridPosition == testGridPosition){
+                    continue;
+                }
+                
+                // Skip if the target grid already has any unit on it.
+                if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)){
+                    continue;
+                }
+                
+                // Grid position is valid put it in list.
+                validGridPositionList.Add(testGridPosition);
+                Debug.Log(testGridPosition);
             }
             
         }

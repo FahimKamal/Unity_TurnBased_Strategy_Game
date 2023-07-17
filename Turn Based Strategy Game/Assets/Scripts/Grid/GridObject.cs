@@ -32,5 +32,7 @@ namespace Grid{
         public void RemoveUnit(Unit unit){
             _unitList.Remove(unit);
         }
+
+        public bool HasAnyUnit() => _unitList.Count > 0;
     }
 }

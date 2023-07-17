@@ -48,5 +48,18 @@ namespace Grid{
         public GridObject GetGridObject(GridPosition  gridPosition){
             return _gridObjectArray[gridPosition.X, gridPosition.Z];
         }
+
+        /// <summary>
+        /// Method checks if the given gridPosition is valid or not. Value of x and z have to be zero or higher not lower.
+        /// Also value of x and z have to be less then width and height.
+        /// </summary>
+        /// <param name="gridPosition"></param>
+        /// <returns></returns>
+        public bool IsValidGridPosition(GridPosition gridPosition){
+            return gridPosition.X >= 0 &&
+                   gridPosition.Z >= 0 &&
+                   gridPosition.X < _width &&
+                   gridPosition.Z < _height;
+        }
     }
 }

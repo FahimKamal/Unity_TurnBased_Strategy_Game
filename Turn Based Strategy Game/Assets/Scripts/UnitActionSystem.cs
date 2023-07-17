@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using UnityEngine;
 
 public class UnitActionSystem : MonoBehaviour{
@@ -20,8 +21,15 @@ public class UnitActionSystem : MonoBehaviour{
     private void Update(){
         
         if (Input.GetMouseButtonDown(0)){
+            // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
             if (TryHandleUnitSelection()) return;
-            selectedUnit.GetMoveAction().Move(MouseWorld.GetPosition());
+            
+            // if no new unit is selected then move the already selected unit to that position.
+            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+            if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)){
+                selectedUnit.GetMoveAction().Move(mouseGridPosition);
+            }
+            // selectedUnit.GetMoveAction().Move(MouseWorld.GetPosition());
         }
     }
 
