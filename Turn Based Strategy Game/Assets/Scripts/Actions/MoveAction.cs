@@ -17,6 +17,16 @@ namespace Actions{
             _targetPosition = transform.position;
         }
 
+        public override string GetActionName(){
+            return "Move";
+        }
+
+        public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
+            OnActionComplete = onActionComplete;
+            _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+            IsActive = true;
+        }
+
         private void Update(){
             if (!IsActive) return;
         
@@ -53,27 +63,15 @@ namespace Actions{
         /// </summary>
         /// <param name="gridPosition"></param>
         /// <param name="onActionComplete"></param>
-        public void Move(GridPosition gridPosition, Action onActionComplete){
-            OnActionComplete = onActionComplete;
-            _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
-            IsActive = true;
-        }
-
-        /// <summary>
-        /// Check if given gridPosition is a valid moveAction gridPosition or not.
-        /// </summary>
-        /// <param name="gridPosition"></param>
-        /// <returns></returns>
-        public bool IsValidActionGridPosition(GridPosition gridPosition){
-            List<GridPosition> validGridPositionList = GetValidActionGridPositionList();
-            return validGridPositionList.Contains(gridPosition);
-        }
+        // public void Move(GridPosition gridPosition, Action onActionComplete){
+        //     
+        // }
 
         /// <summary>
         /// Get the list of valid gridPosition where unit can move to.
         /// </summary>
         /// <returns>List of valid GridPosition</returns>
-        public List<GridPosition> GetValidActionGridPositionList(){
+        public override List<GridPosition> GetValidActionGridPositionList(){
             var validGridPositionList = new List<GridPosition>();
 
             var unitGridPosition = Unit.GetGridPosition();

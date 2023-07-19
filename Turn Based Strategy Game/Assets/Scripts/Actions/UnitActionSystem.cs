@@ -1,10 +1,19 @@
 using System;
 using Grid;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Actions{
     public class UnitActionSystem : MonoBehaviour{
         public static UnitActionSystem Instance{ get; private set; }
+        
+        public event EventHandler OnSelectedUnitChanged;
+    
+        [SerializeField] private Unit selectedUnit;
+        [SerializeField] private LayerMask unitLayerMask;
+
+        private BaseAction _selectedAction;
+        private bool _isBusy;
 
         private void Awake(){
             if (Instance != null){
@@ -14,33 +23,32 @@ namespace Actions{
             }
             Instance = this;
         }
-        public event EventHandler OnSelectedUnitChanged;
-    
-        [SerializeField] private Unit selectedUnit;
-        [SerializeField] private LayerMask unitLayerMask;
 
-        private bool _isBusy;
+        private void Start(){
+            SetSelectedUnit(selectedUnit);
+        }
 
         private void Update(){
 
             if (_isBusy) return;
-        
+
             if (Input.GetMouseButtonDown(0)){
                 // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
                 if (TryHandleUnitSelection()) return;
-            
-                // if no new unit is selected then move the already selected unit to that position.
-                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-                if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)){
-                    SetBusy();
-                    selectedUnit.GetMoveAction().Move(mouseGridPosition, ClearBusy);
-                }
-                // selectedUnit.GetMoveAction().Move(MouseWorld.GetPosition());
-            }
 
-            if (Input.GetMouseButtonDown(1)){
-                SetBusy();
-                selectedUnit.GetSpinAction().Spin(ClearBusy);
+
+                HandleSelectedAction();
+            }
+        }
+
+        private void HandleSelectedAction(){
+            if (Input.GetMouseButtonDown(0)){
+                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+
+                if (_selectedAction.IsValidActionGridPosition(mouseGridPosition)){
+                    SetBusy();
+                    _selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+                }
             }
         }
 
@@ -69,7 +77,12 @@ namespace Actions{
 
         private void SetSelectedUnit(Unit unit){
             selectedUnit = unit;
+            SetSelectedAction(unit.GetMoveAction());
             OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetSelectedAction(BaseAction baseAction){
+            _selectedAction = baseAction;
         }
 
         public Unit GetSelectedUnit(){
