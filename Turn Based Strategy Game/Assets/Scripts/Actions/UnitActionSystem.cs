@@ -74,6 +74,10 @@ namespace Actions{
                 var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var raycastHit, float.MaxValue, unitLayerMask)){
                     if (raycastHit.transform.TryGetComponent<Unit>(out var unit)){
+                        if (unit == selectedUnit){
+                            // If unit is already selected then don't select it again.
+                            return false;
+                        }
                         SetSelectedUnit(unit);
                         return true;
                     }
