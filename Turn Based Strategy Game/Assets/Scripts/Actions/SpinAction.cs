@@ -33,6 +33,7 @@ namespace Actions{
             OnActionComplete = onActionComplete;
             IsActive = true;
             _totalSpinAmount = 0f;
+            Debug.Log("Talking spin action.");
         }
 
         public override List<GridPosition> GetValidActionGridPositionList(){

@@ -31,20 +31,21 @@ namespace Actions{
         private void Update(){
 
             if (_isBusy) return;
-
-            if (Input.GetMouseButtonDown(0)){
-                // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
-                if (TryHandleUnitSelection()) return;
-
-
-                HandleSelectedAction();
+            
+            // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
+            if (TryHandleUnitSelection()){
+                return;
             }
+
+
+            HandleSelectedAction();
         }
 
         private void HandleSelectedAction(){
             if (Input.GetMouseButtonDown(0)){
                 GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
 
+                
                 if (_selectedAction.IsValidActionGridPosition(mouseGridPosition)){
                     SetBusy();
                     _selectedAction.TakeAction(mouseGridPosition, ClearBusy);
@@ -65,13 +66,18 @@ namespace Actions{
         /// </summary>
         /// <returns>Return true if it did select a unit else returns false.</returns>
         private bool TryHandleUnitSelection(){
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var raycastHit, float.MaxValue, unitLayerMask)){
-                if (raycastHit.transform.TryGetComponent<Unit>(out var unit)){
-                    SetSelectedUnit(unit);
-                    return true;
+            if (Input.GetMouseButtonDown(0)){
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var raycastHit, float.MaxValue, unitLayerMask)){
+                    if (raycastHit.transform.TryGetComponent<Unit>(out var unit)){
+                        SetSelectedUnit(unit);
+                        return true;
+                    }
                 }
+
+                return false;
             }
+
             return false;
         }
 
