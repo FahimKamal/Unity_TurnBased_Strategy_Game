@@ -8,11 +8,18 @@ namespace Actions{
         [SerializeField] private Transform actionButtonContainerTransform;
         private void Start(){
             UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
+            UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
             CreateUnitActionButtons();
+            UpdateSelectedVisual();
+        }
+
+        private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e){
+            UpdateSelectedVisual();
         }
 
         private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e){
             CreateUnitActionButtons();
+            UpdateSelectedVisual();
         }
 
         private void CreateUnitActionButtons(){
@@ -24,13 +31,24 @@ namespace Actions{
                 var actionButtonUI = actionButton.GetComponent<ActionButtonUI>();
                 actionButtonUI.SetBaseAction(action);
             }
-
-            selectedUnit.GetBaseActionArray();
         }
 
         private void ClearActionButtons(){
             foreach (Transform button in actionButtonContainerTransform){
                 Destroy(button.gameObject);
+            }
+        }
+
+        private void UpdateSelectedVisual(){
+            var selectedAction = UnitActionSystem.Instance.GetSelectedAction();
+            foreach (Transform button in actionButtonContainerTransform){
+                var actionButtonUI = button.GetComponent<ActionButtonUI>();
+                if (actionButtonUI.GetBaseAction == selectedAction){
+                    actionButtonUI.SetSelected();
+                }
+                else{
+                    actionButtonUI.ClearSelected();
+                }
             }
         }
     }
