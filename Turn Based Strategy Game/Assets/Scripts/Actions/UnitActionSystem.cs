@@ -2,6 +2,7 @@ using System;
 using Grid;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Actions{
     public class UnitActionSystem : MonoBehaviour{
@@ -31,8 +32,11 @@ namespace Actions{
         private void Update(){
 
             if (_isBusy) return;
-            
-            // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
+
+            // if mouse pointer is over any UI elements them don't select or execute any actions.
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+                // If on mouse click a unit is selected, then don't move the unit on click just select it and return.
             if (TryHandleUnitSelection()){
                 return;
             }
@@ -93,6 +97,10 @@ namespace Actions{
 
         public Unit GetSelectedUnit(){
             return selectedUnit;
+        }
+
+        public BaseAction GetSelectedAction(){
+            return _selectedAction;
         }
     }
 }

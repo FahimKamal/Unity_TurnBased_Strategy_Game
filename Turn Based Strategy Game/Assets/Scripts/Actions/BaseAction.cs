@@ -24,7 +24,7 @@ namespace Actions{
         /// <returns></returns>
         public virtual bool IsValidActionGridPosition(GridPosition gridPosition){
             List<GridPosition> validGridPositionList = GetValidActionGridPositionList();
-            return validGridPositionList.Contains(gridPosition);
+            return validGridPositionList.Contains(gridPosition); 
         }
 
         public abstract List<GridPosition> GetValidActionGridPositionList();
