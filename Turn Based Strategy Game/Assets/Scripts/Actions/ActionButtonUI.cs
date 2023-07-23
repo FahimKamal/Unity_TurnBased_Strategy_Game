@@ -28,15 +28,8 @@ namespace Actions{
         /// <summary>
         /// Indicate that related action with this button is now selected.
         /// </summary>
-        public void SetSelected(){
-            selectedImage.SetActive(true);
-        }
-
-        /// <summary>
-        /// Indicate that related action is not selected.
-        /// </summary>
-        public void ClearSelected(){
-            selectedImage.SetActive(false);
+        public void UpdateSelectedVisual(){
+            selectedImage.SetActive(GetBaseAction == UnitActionSystem.Instance.GetSelectedAction());
         }
     }
 }

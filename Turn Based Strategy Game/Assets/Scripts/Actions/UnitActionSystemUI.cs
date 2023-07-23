@@ -43,12 +43,7 @@ namespace Actions{
             var selectedAction = UnitActionSystem.Instance.GetSelectedAction();
             foreach (Transform button in actionButtonContainerTransform){
                 var actionButtonUI = button.GetComponent<ActionButtonUI>();
-                if (actionButtonUI.GetBaseAction == selectedAction){
-                    actionButtonUI.SetSelected();
-                }
-                else{
-                    actionButtonUI.ClearSelected();
-                }
+                actionButtonUI.UpdateSelectedVisual();
             }
         }
     }
