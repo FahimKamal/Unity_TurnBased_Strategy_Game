@@ -42,5 +42,9 @@ namespace Actions{
                 unitGridPosition
             };
         }
+
+        public override int GetActionPointsCost(){
+            return 2;
+        }
     }
 }

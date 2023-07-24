@@ -14,7 +14,6 @@ namespace Actions{
         }
 
         private void UnitActionSystem_OnBusyChanged(object sender, bool e){
-            Debug.Log("I'm here");
             gameObject.SetActive(e);
         }
     }

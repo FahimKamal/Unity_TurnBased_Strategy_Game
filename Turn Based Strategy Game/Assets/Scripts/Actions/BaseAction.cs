@@ -28,5 +28,14 @@ namespace Actions{
         }
 
         public abstract List<GridPosition> GetValidActionGridPositionList();
+
+        /// <summary>
+        /// Points Casts to execute each action. Can be different for each actions by
+        /// Overwriting this method. 
+        /// </summary>
+        /// <returns></returns>
+        public virtual int GetActionPointsCost(){
+            return 1;
+        }
     }
 }
