@@ -10,6 +10,7 @@ namespace Actions{
         
         public event EventHandler OnSelectedUnitChanged;
         public event EventHandler OnSelectedActionChanged;
+        public event EventHandler<bool> OnBusyChanged;
     
         [SerializeField] private Unit selectedUnit;
         [SerializeField] private LayerMask unitLayerMask;
@@ -60,10 +61,12 @@ namespace Actions{
 
         private void SetBusy(){
             _isBusy = true;
+            OnBusyChanged?.Invoke(this, _isBusy);
         }
 
         private void ClearBusy(){
             _isBusy = false;
+            OnBusyChanged?.Invoke(this, _isBusy);
         }
 
         /// <summary>
