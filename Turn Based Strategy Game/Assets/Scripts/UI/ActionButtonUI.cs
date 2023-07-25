@@ -1,8 +1,9 @@
+using Actions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Actions{
+namespace UI{
     public class ActionButtonUI : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI textMeshPro;
         [SerializeField] private Button button;

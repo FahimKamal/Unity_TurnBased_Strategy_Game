@@ -1,19 +1,36 @@
 using System;
+using Actions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Actions{
+namespace UI{
     public class UnitActionSystemUI : MonoBehaviour{
         [SerializeField] private Transform actionButtonPrefab;
         [SerializeField] private Transform actionButtonContainerTransform;
         [SerializeField] private TextMeshProUGUI actionPointsText;
-        private void Start(){
+
+        private void OnEnable(){
             UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
             UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
             UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted;
+            TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+            Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
+        }
+
+        
+
+
+        private void Start(){
             CreateUnitActionButtons();
             UpdateSelectedVisual();
+            UpdateActionPoints();
+        }
+        
+        private void Unit_OnAnyActionPointsChanged(object sender, EventArgs e){
+            UpdateActionPoints();
+        }
+        
+        private void TurnSystem_OnTurnChanged(object sender, EventArgs e){
             UpdateActionPoints();
         }
 

@@ -1,7 +1,7 @@
-using System;
+using Actions;
 using UnityEngine;
 
-namespace Actions{
+namespace UI{
     public class ActionBusyUI : MonoBehaviour
     {
 
