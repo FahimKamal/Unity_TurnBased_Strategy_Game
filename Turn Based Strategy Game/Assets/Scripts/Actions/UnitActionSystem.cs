@@ -1,6 +1,5 @@
 using System;
 using Grid;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -35,6 +34,9 @@ namespace Actions{
         private void Update(){
 
             if (_isBusy) return;
+
+            // If it is not player's turn then don't do anything.
+            if (!TurnSystem.Instance.IsPlayerTurn) return;
 
             // if mouse pointer is over any UI elements them don't select or execute any actions.
             if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -84,6 +86,11 @@ namespace Actions{
                     if (raycastHit.transform.TryGetComponent<Unit>(out var unit)){
                         if (unit == selectedUnit){
                             // If unit is already selected then don't select it again.
+                            return false;
+                        }
+
+                        if (unit.IsEnemy){
+                            // If unit is enemy type then don't select it.
                             return false;
                         }
                         SetSelectedUnit(unit);

@@ -16,10 +16,7 @@ namespace UI{
             TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
             Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
         }
-
         
-
-
         private void Start(){
             CreateUnitActionButtons();
             UpdateSelectedVisual();

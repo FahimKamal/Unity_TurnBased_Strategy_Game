@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour{
     private const int ACTION_POINTS_MAX = 2;
-
     public static event EventHandler OnAnyActionPointsChanged;
+
+    [SerializeField] private bool isEnemy;
     
     private GridPosition _currentGridPosition;
     private MoveAction _moveAction;
@@ -15,7 +16,7 @@ public class Unit : MonoBehaviour{
     private int _actionPoints = ACTION_POINTS_MAX;
 
     private void OnEnable(){
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        
     }
 
     private void Awake(){
@@ -25,7 +26,7 @@ public class Unit : MonoBehaviour{
     }
 
     private void Start(){
-        
+        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
         _currentGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(_currentGridPosition, this);
     }
@@ -55,6 +56,9 @@ public class Unit : MonoBehaviour{
     public BaseAction[] GetBaseActionArray(){
         return _baseActionArray;
     }
+    
+    public int GetActionPoints => _actionPoints;
+    public bool IsEnemy => isEnemy;
 
     public bool TrySpendActionPointsToTakeAction(BaseAction baseAction){
         if (CanSpendActionPointsToTakeAction(baseAction)){
@@ -70,15 +74,17 @@ public class Unit : MonoBehaviour{
 
 
     private void SpendActionPoints(int amount){
+        
         _actionPoints -= amount;
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
     
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e){
-        _actionPoints = ACTION_POINTS_MAX;
-        OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        if ((isEnemy && !TurnSystem.Instance.IsPlayerTurn) || 
+            (!isEnemy && TurnSystem.Instance.IsPlayerTurn)){
+            _actionPoints = ACTION_POINTS_MAX;
+            OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
+        
     }
-
-    public int GetActionPoints => _actionPoints;
-
 }
