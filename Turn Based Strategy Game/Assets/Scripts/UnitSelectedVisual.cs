@@ -20,11 +20,6 @@ public class UnitSelectedVisual : MonoBehaviour{
     }
 
     private void UpdateVisual(){
-        if (UnitActionSystem.Instance.GetSelectedUnit() == unit){
-            _meshRenderer.enabled = true;
-        }
-        else{
-            _meshRenderer.enabled = false;
-        }
+        _meshRenderer.enabled = UnitActionSystem.Instance.GetSelectedUnit() == unit;
     }
 }
