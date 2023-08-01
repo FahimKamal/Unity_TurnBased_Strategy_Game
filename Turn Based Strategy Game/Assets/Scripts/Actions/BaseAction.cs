@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Actions{
     public abstract class BaseAction : MonoBehaviour{
-        protected Unit Unit;
+        protected Unit ParentUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
 
         protected virtual void Awake(){
-            Unit = GetComponent<Unit>();
+            ParentUnit = GetComponent<Unit>();
         }
 
         public abstract string GetActionName();

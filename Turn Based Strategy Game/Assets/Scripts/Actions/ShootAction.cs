@@ -13,38 +13,49 @@ namespace Actions{
         private State _state;
         private int _maxShootDistance = 7;
         private float _stateTimer;
+        private Unit _targetUnit;
     
         private void Update(){
             if (!IsActive) return;
 
             _stateTimer -= Time.deltaTime;
 
-            switch (_state){
-                case State.Aiming:
-                    if (_stateTimer <= 0f){
-                        _state = State.Shooting;
-                        const float shootingStateTime = 0.1f;
-                        _stateTimer = shootingStateTime;
-                    }
-                    break;
-                case State.Shooting:
-                    if (_stateTimer <= 0f){
-                        _state = State.Cooloff;
-                    }
-                    break;
-                case State.Cooloff:
-                    break;
+            if (_stateTimer <= 0f){
+                NextState();
             }
         }
-        public override string GetActionName(){
+
+        private void NextState(){
+            switch (_state){
+                case State.Aiming:
+                    _state = State.Shooting;
+                    const float shootingStateTime = 0.1f;
+                    _stateTimer = shootingStateTime;
+                    break;
+                case State.Shooting:
+                    _state = State.Cooloff;
+                    var collOffStateTime = 0.5f;
+                    _stateTimer = collOffStateTime;
+                    break;
+                case State.Cooloff:
+                    IsActive = false;
+                    OnActionComplete();
+                    break;
+            }
+            Debug.Log(_state);
+        }
+        public override string GetActionName(){ 
             return "Shoot";
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
             OnActionComplete = onActionComplete;
             IsActive = true;
-            // _totalSpinAmount = 0f;
             Debug.Log("Talking Shoot action.");
+
+            _state = State.Aiming;
+            var aimingStateTime = 1f;
+            _stateTimer = aimingStateTime;
         }
 
         /// <summary>
@@ -54,7 +65,7 @@ namespace Actions{
         public override List<GridPosition> GetValidActionGridPositionList(){
             var validGridPositionList = new List<GridPosition>();
 
-            var unitGridPosition = Unit.GetGridPosition();
+            var unitGridPosition = ParentUnit.GetGridPosition();
         
             for (int x = -_maxShootDistance; x <= _maxShootDistance; x++){
                 for (int z = -_maxShootDistance; z <= _maxShootDistance; z++){
@@ -81,7 +92,7 @@ namespace Actions{
                     
                     // Skip if the target unit is same as the unit. Both of them is in the same team.
                     var targetUnit = LevelGrid.Instance.GetUnitOnGridPosition(testGridPosition);
-                    if(targetUnit.IsEnemy == Unit.IsEnemy){
+                    if(targetUnit.IsEnemy == ParentUnit.IsEnemy){
                         continue;
                     }
                 

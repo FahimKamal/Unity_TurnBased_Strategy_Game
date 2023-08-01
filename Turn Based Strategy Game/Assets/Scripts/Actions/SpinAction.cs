@@ -37,7 +37,7 @@ namespace Actions{
         }
 
         public override List<GridPosition> GetValidActionGridPositionList(){
-            var unitGridPosition = Unit.GetGridPosition();
+            var unitGridPosition = ParentUnit.GetGridPosition();
             return new List<GridPosition>{
                 unitGridPosition
             };

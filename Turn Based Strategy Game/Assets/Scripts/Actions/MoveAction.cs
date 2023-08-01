@@ -74,7 +74,7 @@ namespace Actions{
         public override List<GridPosition> GetValidActionGridPositionList(){
             var validGridPositionList = new List<GridPosition>();
 
-            var unitGridPosition = Unit.GetGridPosition();
+            var unitGridPosition = ParentUnit.GetGridPosition();
         
             for (int x = -maxMoveDistance; x <= maxMoveDistance; x++){
                 for (int z = -maxMoveDistance; z <= maxMoveDistance; z++){
