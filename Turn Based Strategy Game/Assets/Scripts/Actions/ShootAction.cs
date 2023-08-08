@@ -53,7 +53,7 @@ namespace Actions{
                 TargetUnit = _targetUnit, 
                 ShootingUnit = ParentUnit
             });
-            _targetUnit.Damage();
+            _targetUnit.Damage(40);
         }
 
         private void NextState(){
