@@ -5,7 +5,12 @@ using UnityEngine;
 
 namespace Actions{
     public class ShootAction : BaseAction{
-        public event EventHandler OnShoot;
+        public event EventHandler<OnShootEventArgs> OnShoot;
+        
+        public class OnShootEventArgs: EventArgs{
+            public Unit TargetUnit;
+            public Unit ShootingUnit;
+        }
         private enum State{
             Aiming, Shooting, Cooloff
         }
@@ -44,7 +49,10 @@ namespace Actions{
         }
 
         private void Shoot(){
-            OnShoot?.Invoke(this, EventArgs.Empty);
+            OnShoot?.Invoke(this, new OnShootEventArgs{
+                TargetUnit = _targetUnit, 
+                ShootingUnit = ParentUnit
+            });
             _targetUnit.Damage();
         }
 
