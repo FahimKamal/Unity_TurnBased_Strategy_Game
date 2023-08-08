@@ -4,8 +4,8 @@ using Grid;
 using UnityEngine;
 
 namespace Actions{
-    public class ShootAction : BaseAction
-    {
+    public class ShootAction : BaseAction{
+        public event EventHandler OnShoot;
         private enum State{
             Aiming, Shooting, Cooloff
         }
@@ -44,6 +44,7 @@ namespace Actions{
         }
 
         private void Shoot(){
+            OnShoot?.Invoke(this, EventArgs.Empty);
             _targetUnit.Damage();
         }
 

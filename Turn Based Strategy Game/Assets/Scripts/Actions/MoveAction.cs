@@ -4,12 +4,12 @@ using Grid;
 using UnityEngine;
 
 namespace Actions{
-    public class MoveAction : BaseAction
-    {
-        [SerializeField] private Animator animator;
+    public class MoveAction : BaseAction{
+        public event EventHandler OnStartMoving;
+        public event EventHandler OnStopMoving;
+        
         [SerializeField] private int maxMoveDistance = 4;
-        private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-    
+
         private Vector3 _targetPosition;
 
         protected override void Awake(){
@@ -25,6 +25,7 @@ namespace Actions{
             ActionStart(onActionComplete);
             
             _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+            OnStartMoving?.Invoke(this, EventArgs.Empty);
         }
 
         private void Update(){
@@ -39,11 +40,9 @@ namespace Actions{
 
                 var rotateSpeed = 10f;
                 transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotateSpeed);
-            
-                animator.SetBool(IsWalking, true);
             }
             else{
-                animator.SetBool(IsWalking, false);
+                OnStopMoving?.Invoke(this, EventArgs.Empty);
                 ActionComplete();
             }
         }
