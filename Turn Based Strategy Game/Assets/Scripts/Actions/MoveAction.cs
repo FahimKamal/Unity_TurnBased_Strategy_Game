@@ -22,9 +22,9 @@ namespace Actions{
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
-            OnActionComplete = onActionComplete;
+            ActionStart(onActionComplete);
+            
             _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
-            IsActive = true;
         }
 
         private void Update(){
@@ -44,8 +44,7 @@ namespace Actions{
             }
             else{
                 animator.SetBool(IsWalking, false);
-                IsActive = false;
-                OnActionComplete();
+                ActionComplete();
             }
         }
 

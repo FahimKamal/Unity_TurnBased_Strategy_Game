@@ -16,8 +16,7 @@ namespace Actions{
 
             _totalSpinAmount += spinAddAmount;
             if (_totalSpinAmount >= 360f){
-                IsActive = false;
-                OnActionComplete();
+                ActionComplete();
             }
         }
 
@@ -30,8 +29,7 @@ namespace Actions{
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
-            OnActionComplete = onActionComplete;
-            IsActive = true;
+            ActionStart(onActionComplete);
             _totalSpinAmount = 0f;
             Debug.Log("Talking spin action.");
         }

@@ -53,6 +53,10 @@ public class Unit : MonoBehaviour{
         return _currentGridPosition;
     }
 
+    public Vector3 GetWorldPosition(){
+        return LevelGrid.Instance.GetWorldPosition(_currentGridPosition);
+    }
+
     public BaseAction[] GetBaseActionArray(){
         return _baseActionArray;
     }
@@ -86,5 +90,9 @@ public class Unit : MonoBehaviour{
             OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
         }
         
+    }
+
+    public void Damage(){
+        Debug.Log(transform + "Damaged!");
     }
 }

@@ -11,18 +11,40 @@ namespace Actions{
         }
 
         private State _state;
-        private int _maxShootDistance = 7;
+        private readonly int _maxShootDistance = 7;
         private float _stateTimer;
         private Unit _targetUnit;
+        private bool _canShootBullet;
     
         private void Update(){
             if (!IsActive) return;
 
             _stateTimer -= Time.deltaTime;
 
+            switch (_state){
+                case State.Aiming:
+                    // Rotate towards the target.
+                    var rotateSpeed = 10f;
+                    Vector3 aimDirection = (_targetUnit.GetWorldPosition() - ParentUnit.GetWorldPosition()).normalized;
+                    transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * rotateSpeed);
+                    break;
+                case State.Shooting:
+                    if (_canShootBullet){
+                        Shoot();
+                        _canShootBullet = false;
+                    }
+                    break;
+                case State.Cooloff:
+                    break;
+            }
+            
             if (_stateTimer <= 0f){
                 NextState();
             }
+        }
+
+        private void Shoot(){
+            _targetUnit.Damage();
         }
 
         private void NextState(){
@@ -39,7 +61,7 @@ namespace Actions{
                     break;
                 case State.Cooloff:
                     IsActive = false;
-                    OnActionComplete();
+                    ActionComplete();
                     break;
             }
             Debug.Log(_state);
@@ -49,13 +71,15 @@ namespace Actions{
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
-            OnActionComplete = onActionComplete;
-            IsActive = true;
+            ActionStart(onActionComplete);
             Debug.Log("Talking Shoot action.");
+            _targetUnit = LevelGrid.Instance.GetUnitOnGridPosition(gridPosition);
 
             _state = State.Aiming;
             var aimingStateTime = 1f;
             _stateTimer = aimingStateTime;
+
+            _canShootBullet = true;
         }
 
         /// <summary>
