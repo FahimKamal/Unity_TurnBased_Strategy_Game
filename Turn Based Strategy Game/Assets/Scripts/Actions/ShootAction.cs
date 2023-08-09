@@ -142,5 +142,9 @@ namespace Actions{
         public Unit GetTargetUnit(){
             return _targetUnit;
         }
+
+        public int GetMaxShootDistance(){
+            return _maxShootDistance;
+        }
     }
 }
