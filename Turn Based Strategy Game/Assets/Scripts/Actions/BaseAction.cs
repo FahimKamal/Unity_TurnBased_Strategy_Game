@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Actions{
     public abstract class BaseAction : MonoBehaviour{
+        public static event EventHandler OnAnyActionStarted;
+        public static event EventHandler OnAnyActionCompleted;
         protected Unit ParentUnit;
         protected bool IsActive;
         protected Action OnActionComplete;
@@ -45,6 +47,8 @@ namespace Actions{
         protected void ActionStart(Action onActionComplete){
             IsActive = true;
             this.OnActionComplete = onActionComplete;
+            
+            OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -53,6 +57,11 @@ namespace Actions{
         protected void ActionComplete(){
             IsActive = false;
             OnActionComplete();
+            OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public Unit GetParentUnit(){
+            return ParentUnit;
         }
     }
 }

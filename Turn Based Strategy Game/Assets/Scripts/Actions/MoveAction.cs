@@ -22,10 +22,9 @@ namespace Actions{
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
-            ActionStart(onActionComplete);
-            
             _targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
             OnStartMoving?.Invoke(this, EventArgs.Empty);
+            ActionStart(onActionComplete);
         }
 
         private void Update(){

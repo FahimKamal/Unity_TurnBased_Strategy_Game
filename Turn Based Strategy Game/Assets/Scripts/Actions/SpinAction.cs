@@ -29,9 +29,9 @@ namespace Actions{
         }
 
         public override void TakeAction(GridPosition gridPosition, Action onActionComplete){
-            ActionStart(onActionComplete);
             _totalSpinAmount = 0f;
             Debug.Log("Talking spin action.");
+            ActionStart(onActionComplete);
         }
 
         public override List<GridPosition> GetValidActionGridPositionList(){
