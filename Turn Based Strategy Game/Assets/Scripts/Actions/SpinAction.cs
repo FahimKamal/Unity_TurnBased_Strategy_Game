@@ -42,7 +42,7 @@ namespace Actions{
         }
 
         public override int GetActionPointsCost(){
-            return 2;
+            return 1;
         }
     }
 }
